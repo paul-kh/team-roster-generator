@@ -4,10 +4,12 @@ const Engineer = require("./lib/Engineer");
 const Intern = require("./lib/Intern");
 const genRoster = require("./lib/genRosterHTML");
 const fs = require("fs");
-const rosters = [];
+const rosters = []; // array to store each team member after added
 
+// create the class 'App' for controlling the flow of the application
 class App {
     constructor() { }
+    // Method that asks users if they want to add another member
     askToAddMember() {
         inquirer.prompt([
             {
@@ -17,25 +19,25 @@ class App {
             }
         ])
             .then(val => {
-                // if user says yes
+                // if users say yes, allow users to add another member
                 if (val.choice) {
-                    console.log("add more member");
                     this.addMember();
-                } else {
+                } else { // if users say no, create roster HTML
                     this.createRosterHTML(rosters);
                     console.log(rosters);
                 }
             });
     }
+    // Method that allows users to add a new member
     addMember() {
         inquirer.prompt([
-            {
+            {   // give users the list of roles to choose for the new member to be added
                 type: "list",
                 choices: ["Manager", "Engineer", "Intern"],
                 message: "Please select role for new member:",
                 name: "role"
             }
-        ]).then(answers => {
+        ]).then(answers => { // after users chose a role, prompt users to input data accordingly to the chosen role
             if (answers.role === "Manager") {
                 // prompt user to input manager's data
                 this.inputMemberInfo(answers.role);
@@ -50,6 +52,7 @@ class App {
             }
         });
     }
+    // Method that generate HTML file of roster based on the number of team members that were added
     createRosterHTML(employees){
         fs.writeFile("./output/roster.html", genRoster.genRosterHtml(employees),function(err){
             if (err){
@@ -58,7 +61,7 @@ class App {
 
         })
     }
-    
+    // Method that prompts users to add member's data according to his/her role, then push the new member to the array 'rosters'
     inputMemberInfo(role) {
         console.log(role);
         if (role === "Manager") {
@@ -126,6 +129,7 @@ class App {
                     name: "email",
                     message: "Enter email address (example: paul@fakemail.com):",
                     validate: function(email){
+                        // validate if users input data in email format
                         return  /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/gi.test(email);
                     }
                 }
@@ -173,8 +177,8 @@ class App {
         }
     }
 }
-
-
+// create object instance 'app'
 const app = new App()
+// start app by prompting users to choose a role for the new member to be added to the team
 app.addMember();
 
