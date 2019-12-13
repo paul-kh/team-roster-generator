@@ -10,7 +10,7 @@ The application will prompt the user for information about the team manager and 
 
 ![Alt text](./lib/images/TDD.png?raw=true "Test Driven Development Results")
 
-## User Storyls
+## User Story
 
 As a manager
 I want to generate a webpage that displays my team's basic info
